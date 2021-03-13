@@ -8,6 +8,9 @@ class Ballot(models.Model):
     name_text = models.CharField(max_length=100)
     opening_date = models.DateTimeField("opening date and time")
     closing_date = models.DateTimeField("closing date and time")
+    url_fragment_text = models.CharField(
+        max_length=40, help_text="Slug text to be used in the urls for this ballot"
+    )
 
     def __str__(self):
         return self.name_text
