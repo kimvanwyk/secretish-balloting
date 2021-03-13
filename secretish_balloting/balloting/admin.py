@@ -9,12 +9,18 @@ class ChoiceInline(admin.TabularInline):
 
 
 class BallotAdmin(admin.ModelAdmin):
-    list_display = ("name_text", "opening_date", "closing_date", "is_open")
+    list_display = (
+        "name_text",
+        "url_fragment_text",
+        "opening_date",
+        "closing_date",
+        "is_open",
+    )
     fieldsets = [
-        (None, {"fields": ["name_text"]}),
+        (None, {"fields": ["name_text", "url_fragment_text"]}),
         (
             "Date information",
-            {"fields": ["opening_date", "closing_date"], "classes": ["collapse"]},
+            {"fields": ["opening_date", "closing_date"]},
         ),
     ]
 
