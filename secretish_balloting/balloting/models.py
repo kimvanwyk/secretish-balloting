@@ -26,6 +26,7 @@ class Ballot(models.Model):
 class Question(models.Model):
     ballot = models.ForeignKey(Ballot, on_delete=models.CASCADE)
     question_text = models.CharField(max_length=100)
+    order_int = models.IntegerField("Question order")
 
     def __str__(self):
         return self.question_text
