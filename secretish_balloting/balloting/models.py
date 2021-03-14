@@ -1,7 +1,9 @@
 import datetime
+import random
 
-from django.db import models
+from django.db import models, transaction, IntegrityError
 from django.utils import timezone
+from django.utils.crypto import get_random_string
 
 
 class Ballot(models.Model):
@@ -38,3 +40,30 @@ class Choice(models.Model):
 
     def __str__(self):
         return self.choice_text
+
+
+class Voter(models.Model):
+    ballot = models.ForeignKey(Ballot, on_delete=models.CASCADE)
+    email_text = models.EmailField("Email address")
+    description_text = models.CharField(
+        "Description", max_length=200, help_text="A descriptive note for this voter"
+    )
+    emailed_bool = models.BooleanField(
+        "Voter has been emailed voting instructions", default=False
+    )
+    url_fragment_text = models.CharField(
+        max_length=20, unique=True, null=True, blank=True, default=None
+    )
+
+    def __str__(self):
+        return self.description_text
+
+    def save(self, *args, **kwds):
+        if self.url_fragment_text is None:
+            # get current url fragments to ensure a unique one
+            fragments = [o.url_fragment_text for o in Voter.objects.all()]
+            while True:
+                self.url_fragment_text = random.randint(10000000, 99999999)
+                if self.url_fragment_text not in fragments:
+                    break
+        super().save(*args, **kwds)
