@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 
-from .models import Ballot, Question, Choice, Voter
+from .models import Ballot, Question, Choice, Voter, Vote
 
 
 def vote(request, ballot_fragment, voter_fragment):
@@ -10,12 +10,17 @@ def vote(request, ballot_fragment, voter_fragment):
     voter = get_object_or_404(Voter, url_fragment_text=voter_fragment)
     questions = Question.objects.filter(ballot=ballot).order_by("order_int").all()
     if request.method == "POST":
-        choices = {
-            q.order_int: request.POST.get(f"question{q.order_int}_choice")
+        choices = [
+            request.POST.get(f"question{q.order_int}_choice")
             for q in questions
             if request.POST.get(f"question{q.order_int}_choice")
-        }
+        ]
         if len(choices) == len(questions):
+            # votes = Vote.objects.filter(ballot=ballot).all()
+            # if votes:
+            #     votes.delete()
+            # for choice in choices:
+            #     v= Vote(ballot, get_object_or_404(Choice, id=choice)
             return HttpResponse(f"Thanks for voting")
         else:
             error_message = "Please select an option for each question"
