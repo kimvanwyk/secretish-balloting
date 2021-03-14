@@ -3,6 +3,7 @@ from collections import defaultdict, Counter
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
+from django.utils import timezone
 
 from .models import Ballot, Question, Choice, Voter, Vote
 
@@ -108,6 +109,7 @@ def ballot_results(request, ballot_fragment):
         "balloting/results.html",
         {
             "ballot": ballot,
+            "now": timezone.now(),
             "results": results_list,
         },
     )
