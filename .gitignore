@@ -14,3 +14,4 @@ build/
 tests/report/
 .venv
 .env
+*.sqlite3
