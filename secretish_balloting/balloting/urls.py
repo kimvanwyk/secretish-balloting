@@ -4,6 +4,7 @@ from . import views
 
 app_name = "balloting"
 urlpatterns = [
+    path("<str:ballot_fragment>/results/", views.ballot_results, name="ballot_results"),
     path("<str:ballot_fragment>/<str:voter_fragment>/", views.vote, name="vote"),
     path(
         "<str:ballot_fragment>/<str:voter_fragment>/summary/",

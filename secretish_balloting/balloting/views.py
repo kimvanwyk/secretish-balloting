@@ -65,3 +65,49 @@ def voting_summary(request, ballot_fragment, voter_fragment):
             "summary": summary,
         },
     )
+
+
+def ballot_results(request, ballot_fragment):
+    ballot = get_object_or_404(Ballot, url_fragment_text=ballot_fragment)
+    num_voters = len(Voter.objects.filter(ballot=ballot).all())
+    votes = (
+        Vote.objects.filter(choice__question__ballot=ballot)
+        .order_by("choice__question__order_int")
+        .all()
+    )
+    results_dict = defaultdict(Counter)
+    questions = Question.objects.filter(ballot=ballot).all()
+    for question in questions:
+        for choice in Choice.objects.filter(question=question).all():
+            results_dict[question][choice] = 0
+    for v in votes:
+        results_dict[v.choice.question][v.choice] += 1
+    results_list = []
+    for (question, choices) in results_dict.items():
+        cl = [
+            [frequency, choice.choice_text] for (choice, frequency) in choices.items()
+        ]
+        cl.sort(reverse=True)
+        num_votes = len([c for c in cl if c[0]])
+        for c in cl:
+            c.append(f"{(c[0] / (num_votes * 1.0)) * 100.0:.2f}")
+        results_list.append(
+            (
+                question.order_int,
+                question.question_text,
+                num_votes,
+                num_voters,
+                f"{(num_votes / (num_voters * 1.0)) * 100.0:.2f}",
+                cl,
+            )
+        )
+    results_list.sort()
+    print(results_list)
+    return render(
+        request,
+        "balloting/results.html",
+        {
+            "ballot": ballot,
+            "results": results_list,
+        },
+    )

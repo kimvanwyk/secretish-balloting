@@ -1,0 +1,12 @@
+<h1>{{ballot.name_text}} summary</h1>
+
+{% for q in results %}
+    <h3>Question: {{ q.1 }}</h3>
+    <ul>
+      {% for c in q.5 %}
+          <li> {{ c.1 }}: {{ c.0 }} votes ({{ c.2 }}%)</li>
+      {% endfor %}
+          <li> <strong> Total votes cast: {{ q.2 }} ({{q.4}}%)</strong></li>
+          <li> <strong> Total number of available votes: {{ q.3 }} </strong></li>
+    </ul>
+{% endfor %}
