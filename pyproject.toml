@@ -8,6 +8,7 @@ authors = ["Kim van Wyk <kimv@sahomeloans.com>"]
 python = "^3.8"
 django = "^3.1.7"
 black = "^20.8b1"
+python-dotenv = "^0.15.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
