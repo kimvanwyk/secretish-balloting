@@ -9,7 +9,6 @@ def vote(request, ballot_fragment, voter_fragment):
     ballot = get_object_or_404(Ballot, url_fragment_text=ballot_fragment)
     voter = get_object_or_404(Voter, url_fragment_text=voter_fragment)
     questions = Question.objects.filter(ballot=ballot).order_by("order_int").all()
-    questions = Question.objects.filter(ballot=ballot).order_by("order_int").all()
     if request.method == "POST":
         choices = {
             q.order_int: request.POST.get(f"question{q.order_int}_choice")
