@@ -9,11 +9,39 @@ def vote(request, ballot_fragment, voter_fragment):
 
     ballot = get_object_or_404(Ballot, url_fragment_text=ballot_fragment)
     voter = get_object_or_404(Voter, url_fragment_text=voter_fragment)
-    questions = Question.objects.filter(ballot=ballot).all()
+    questions = Question.objects.filter(ballot=ballot).order_by("order_int").all()
 
-    return HttpResponse(
-        f"ballot: {ballot}; voter: {voter}; questions: {[q.question_text for q in questions]}"
+    return render(
+        request,
+        "balloting/vote.html",
+        {"ballot": ballot, "voter": voter, "questions": questions},
     )
+
+
+def submit_vote(request, ballot_fragment, voter_fragment):
+    ballot = get_object_or_404(Ballot, url_fragment_text=ballot_fragment)
+    voter = get_object_or_404(Voter, url_fragment_text=voter_fragment)
+    questions = Question.objects.filter(ballot=ballot).order_by("order_int").all()
+    print([f"question{q.order_int}_choice" for q in questions])
+    print(request.POST)
+    choices = {
+        q.order_int: request.POST.get(f"question{q.order_int}_choice")
+        for q in questions
+        if request.POST.get(f"question{q.order_int}_choice")
+    }
+    print(choices, len(choices), len(questions))
+    if len(choices) != len(questions):
+        return render(
+            request,
+            "balloting/vote.html",
+            {
+                "ballot": ballot,
+                "voter": voter,
+                "questions": questions,
+                "error_message": "Please select an option for each question",
+            },
+        )
+    return HttpResponse(f"Thanks for voting")
 
     # question = get_object_or_404(Question, pk=question_id)
     # try:
