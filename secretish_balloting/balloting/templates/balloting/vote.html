@@ -2,7 +2,7 @@
 
 {% if error_message %}<p><strong class="error_message">{{ error_message }}</strong></p>{% endif %}
 
-<form action="{% url 'balloting:submit_vote' ballot.url_fragment_text voter.url_fragment_text %}" method="post">
+<form action="{% url 'balloting:vote' ballot.url_fragment_text voter.url_fragment_text %}" method="post">
 {% csrf_token %}
 {% for question in questions.all %}
     <h2>{{ question.question_text }}</h2>
