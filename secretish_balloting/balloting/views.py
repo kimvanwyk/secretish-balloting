@@ -1,3 +1,5 @@
+from collections import defaultdict, Counter
+
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
@@ -22,7 +24,15 @@ def vote(request, ballot_fragment, voter_fragment):
             for choice in choices:
                 v = Vote(voter=voter, choice_id=choice)
                 v.save()
-            return HttpResponse(f"Thanks for voting")
+            return HttpResponseRedirect(
+                reverse(
+                    "balloting:voting_summary",
+                    args=(
+                        ballot_fragment,
+                        voter_fragment,
+                    ),
+                )
+            )
         else:
             error_message = "Please select an option for each question"
     else:
@@ -35,5 +45,23 @@ def vote(request, ballot_fragment, voter_fragment):
             "voter": voter,
             "questions": questions,
             "error_message": error_message,
+        },
+    )
+
+
+def voting_summary(request, ballot_fragment, voter_fragment):
+    ballot = get_object_or_404(Ballot, url_fragment_text=ballot_fragment)
+    voter = get_object_or_404(Voter, url_fragment_text=voter_fragment)
+    votes = (
+        Vote.objects.filter(voter=voter).order_by("choice__question__order_int").all()
+    )
+    summary = [(v.choice.question.question_text, v.choice.choice_text) for v in votes]
+    return render(
+        request,
+        "balloting/summary.html",
+        {
+            "ballot": ballot,
+            "voter": voter,
+            "summary": summary,
         },
     )
