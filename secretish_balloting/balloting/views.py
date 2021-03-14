@@ -11,16 +11,17 @@ def vote(request, ballot_fragment, voter_fragment):
     questions = Question.objects.filter(ballot=ballot).order_by("order_int").all()
     if request.method == "POST":
         choices = [
-            request.POST.get(f"question{q.order_int}_choice")
+            int(request.POST.get(f"question{q.order_int}_choice"))
             for q in questions
             if request.POST.get(f"question{q.order_int}_choice")
         ]
         if len(choices) == len(questions):
-            # votes = Vote.objects.filter(ballot=ballot).all()
-            # if votes:
-            #     votes.delete()
-            # for choice in choices:
-            #     v= Vote(ballot, get_object_or_404(Choice, id=choice)
+            votes = Vote.objects.filter(voter=voter).all()
+            if votes:
+                votes.delete()
+            for choice in choices:
+                v = Vote(voter=voter, choice_id=choice)
+                v.save()
             return HttpResponse(f"Thanks for voting")
         else:
             error_message = "Please select an option for each question"
