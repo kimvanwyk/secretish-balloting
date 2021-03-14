@@ -67,3 +67,10 @@ class Voter(models.Model):
                 if self.url_fragment_text not in fragments:
                     break
         super().save(*args, **kwds)
+
+
+class Vote(models.Model):
+    voter = models.ForeignKey(Voter, on_delete=models.CASCADE)
+    choice = models.ForeignKey(
+        Choice, null=True, default=None, on_delete=models.CASCADE
+    )
