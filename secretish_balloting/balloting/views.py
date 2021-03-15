@@ -103,7 +103,6 @@ def ballot_results(request, ballot_fragment):
             )
         )
     results_list.sort()
-    print(results_list)
     return render(
         request,
         "balloting/results.html",
