@@ -9,3 +9,8 @@ These voters will be emailed:
     <li>{{ voter.email_text }} - {{voter.description_text }}</li>
 {% endfor %}
 </ul>
+
+<form action="{% url 'balloting:email_unemailed' %}" method="post">
+{% csrf_token %}
+<input type="submit" value="Send Emails">
+</form>
