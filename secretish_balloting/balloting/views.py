@@ -1,11 +1,17 @@
 from collections import defaultdict, Counter
+import os
 
+from django.contrib.admin.views.decorators import staff_member_required
+from django.core.mail import send_mass_mail
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.utils import timezone
+from dotenv import load_dotenv
 
 from .models import Ballot, Question, Choice, Voter, Vote
+
+load_dotenv()
 
 
 def vote(request, ballot_fragment, voter_fragment):
@@ -111,4 +117,54 @@ def ballot_results(request, ballot_fragment):
             "now": timezone.now(),
             "results": results_list,
         },
+    )
+
+
+@staff_member_required
+def email_unemailed(request):
+    voters = Voter.objects.filter(emailed_bool=False)
+    # if request.method == "GET":
+    #     return render(request, "balloting/emailer.html", {"voters": voters})
+    with open("balloting/email_templates/instructions.txt") as fh:
+        template = fh.read()
+    emails = []
+    for voter in voters:
+        ballot = Ballot.objects.filter(voter=voter).first()
+        url = reverse(
+            "balloting:vote",
+            args=(
+                ballot.url_fragment_text,
+                voter.url_fragment_text,
+            ),
+        )
+        msg = template.format(
+            **{
+                "ballot_name": ballot.name_text,
+                "contact_name": os.getenv("CONTACT_NAME"),
+                "contact_email": os.getenv("CONTACT_EMAIL"),
+                "url": f"{os.getenv('BASE_URL')}{url}",
+            }
+        )
+
+        emails.append(
+            (
+                f"Voting details for the {ballot.name_text} ballot",
+                msg,
+                os.getenv("FROM_EMAIL"),
+                [voter.email_text],
+            )
+        )
+    if emails:
+        try:
+            send_mass_mail(emails)
+        except Exception as e:
+            return HttpResponse(f"Error sending emails: {e}")
+        for voter in voters:
+            voter.emailed_bool = True
+            voter.save()
+            return HttpResponse(
+                f"<h2>{len(emails)} email{'s' if len(emails) > 1 else ''} sent.</h2>"
+            )
+    return HttpResponse(
+        f"<h2>All voters have been emailed before - no emails were sent.</h2>"
     )

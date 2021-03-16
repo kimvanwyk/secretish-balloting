@@ -1,0 +1,11 @@
+<h1>Emailer Tool</h1>
+
+This page provides a tool to send voting instructions to any voter who has not yet been emailed.
+
+These voters will be emailed:
+
+<ul>
+{% for voter in voters %}
+    <li>{{ voter.email_text }} - {{voter.description_text }}</li>
+{% endfor %}
+</ul>
