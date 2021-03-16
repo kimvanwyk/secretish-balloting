@@ -105,7 +105,7 @@ def ballot_results(request, ballot_fragment):
         if num_voters == 0:
             percentage = 0
         else:
-            percentage = num_votes / (num_voters * 1.0g) * 100.0
+            percentage = num_votes / (num_voters * 1.0) * 100.0
         results_list.append(
             (
                 question.order_int,
