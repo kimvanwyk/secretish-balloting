@@ -97,14 +97,22 @@ def ballot_results(request, ballot_fragment):
         cl.sort(reverse=True)
         num_votes = len([c for c in cl if c[0]])
         for c in cl:
-            c.append(f"{(c[0] / (num_votes * 1.0)) * 100.0:.2f}")
+            if num_votes == 0:
+                percentage = 0
+            else:
+                percentage = c[0] / (num_votes * 1.0) * 100.0
+            c.append(f"{percentage:.2f}")
+        if num_voters == 0:
+            percentage = 0
+        else:
+            percentage = num_votes / (num_voters * 1.0g) * 100.0
         results_list.append(
             (
                 question.order_int,
                 question.question_text,
                 num_votes,
                 num_voters,
-                f"{(num_votes / (num_voters * 1.0)) * 100.0:.2f}",
+                f"{percentage:.2f}",
                 cl,
             )
         )
@@ -123,8 +131,8 @@ def ballot_results(request, ballot_fragment):
 @staff_member_required
 def email_unemailed(request):
     voters = Voter.objects.filter(emailed_bool=False)
-    # if request.method == "GET":
-    #     return render(request, "balloting/emailer.html", {"voters": voters})
+    if request.method == "GET":
+        return render(request, "balloting/emailer.html", {"voters": voters})
     with open("balloting/email_templates/instructions.txt") as fh:
         template = fh.read()
     emails = []
