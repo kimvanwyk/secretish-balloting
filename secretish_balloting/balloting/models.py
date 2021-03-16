@@ -13,6 +13,10 @@ class Ballot(models.Model):
     url_fragment_text = models.CharField(
         max_length=40, help_text="Slug text to be used in the urls for this ballot"
     )
+    url_summary_fragment_text = models.CharField(
+        max_length=40,
+        help_text="Slug text to be used in the summary url for this ballot",
+    )
 
     def __str__(self):
         return self.name_text
@@ -23,6 +27,11 @@ class Ballot(models.Model):
     is_open.admin_order_field = "opening_date"
     is_open.boolean = True
     is_open.short_description = "Ballot open?"
+
+    def save(self, *args, **kwds):
+        if self.url_summary_fragment_text is None:
+            self.url_summary_fragment_text = random.randint(10000000, 99999999)
+        super().save(*args, **kwds)
 
 
 class Question(models.Model):
