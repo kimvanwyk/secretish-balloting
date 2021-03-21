@@ -67,6 +67,11 @@ def vote(request, ballot_fragment, voter_fragment):
 
 def voting_summary(request, ballot_fragment, voter_fragment):
     ballot = get_object_or_404(Ballot, url_fragment_text=ballot_fragment)
+    dt = timezone.now()
+    if dt < ballot.opening_date:
+        return HttpResponse(
+            f"<h2>The {ballot.name_text} ballot has not opened yet. It will open at {ballot.opening_date:%H:%M SAST on %d %B %Y}</h2>"
+        )
     voter = get_object_or_404(Voter, url_fragment_text=voter_fragment)
     votes = (
         Vote.objects.filter(voter=voter).order_by("choice__question__order_int").all()
@@ -79,6 +84,7 @@ def voting_summary(request, ballot_fragment, voter_fragment):
             "ballot": ballot,
             "voter": voter,
             "summary": summary,
+            "closed": dt > ballot.closing_date,
         },
     )
 

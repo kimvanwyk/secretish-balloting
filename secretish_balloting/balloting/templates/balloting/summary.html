@@ -7,6 +7,10 @@ Thank you for voting in the {{ballot.name_text}} ballot. A summary of your votes
     <ul><li>You selected "{{ s.1 }}"</li></ul>
 {% endfor %}
 
-If you wish to change your vote, please <a href="{% url 'balloting:vote' ballot.url_fragment_text voter.url_fragment_text %}">click here</a> to vote again. <strong>Note that only your most recent vote will be recorded.</strong>
+{% if closed %}
+    This ballot has closed - no further votes can be cast. Thank you for casting your vote.
+{% else %}
+    If you wish to change your vote, please <a href="{% url 'balloting:vote' ballot.url_fragment_text voter.url_fragment_text %}">click here</a> to vote again. <strong>Note that only your most recent vote will be recorded.</strong>
+    <p>If you are satisfied with your vote you can close this webpage. Thank you for casting your vote.
+{% endif %}
 
-<p>If you are satisfied with your vote you can close this webpage. Thank you for casting your vote.
