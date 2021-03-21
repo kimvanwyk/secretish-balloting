@@ -16,6 +16,15 @@ load_dotenv()
 
 def vote(request, ballot_fragment, voter_fragment):
     ballot = get_object_or_404(Ballot, url_fragment_text=ballot_fragment)
+    dt = timezone.now()
+    if dt < ballot.opening_date:
+        return HttpResponse(
+            f"<h2>The {ballot.name_text} ballot has not opened yet. It will open at {ballot.opening_date:%H:%M SAST on %d %B %Y}</h2>"
+        )
+    if dt > ballot.closing_date:
+        return HttpResponse(
+            f"<h2>The {ballot.name_text} ballot closed at {ballot.closing_date:%H:%M SAST on %d %B %Y}.</h2>"
+        )
     voter = get_object_or_404(Voter, url_fragment_text=voter_fragment)
     questions = Question.objects.filter(ballot=ballot).order_by("order_int").all()
     if request.method == "POST":
@@ -74,11 +83,10 @@ def voting_summary(request, ballot_fragment, voter_fragment):
     )
 
 
-def ballot_results(request, ballot_fragment, summary_fragment):
+def ballot_results(request, ballot_fragment):
     ballot = get_object_or_404(
         Ballot,
         url_fragment_text=ballot_fragment,
-        url_summary_fragment_text=summary_fragment,
     )
     num_voters = len(Voter.objects.filter(ballot=ballot).all())
     votes = (
