@@ -85,10 +85,16 @@ WSGI_APPLICATION = "secretish_balloting.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+STORAGE_DIR = os.getenv("STORAGE_DIR", None)
+if STORAGE_DIR:
+    STORAGE_DIR = Path(STORAGE_DIR).resolve()
+else:
+    STORAGE_DIR = BASE_DIR
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "NAME": STORAGE_DIR / "db.sqlite3",
     }
 }
 
