@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+import random
+import string
 
 from dotenv import load_dotenv
 
@@ -19,13 +21,30 @@ load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+STORAGE_DIR = os.getenv("STORAGE_DIR", None)
+if STORAGE_DIR:
+    STORAGE_DIR = Path(STORAGE_DIR).resolve()
+else:
+    STORAGE_DIR = BASE_DIR
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY")
+try:
+    with open(STORAGE_DIR / "secret_key.txt") as fh:
+        SECRET_KEY = fh.read().strip()
+except Exception:
+    # cannot load secret, generate a new one and store it
+    with open(STORAGE_DIR / "secret_key.txt", "w") as fh:
+        # random string one-liner from https://stackoverflow.com/questions/2257441/random-string-generation-with-upper-case-letters-and-digits
+        print(STORAGE_DIR)
+        SECRET_KEY = "".join(
+            random.SystemRandom().choice(string.ascii_uppercase + string.digits)
+            for _ in range(20)
+        )
+        fh.write(SECRET_KEY)
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG")
@@ -84,12 +103,6 @@ WSGI_APPLICATION = "secretish_balloting.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
-STORAGE_DIR = os.getenv("STORAGE_DIR", None)
-if STORAGE_DIR:
-    STORAGE_DIR = Path(STORAGE_DIR).resolve()
-else:
-    STORAGE_DIR = BASE_DIR
 
 DATABASES = {
     "default": {
