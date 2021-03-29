@@ -176,7 +176,7 @@ def email_unemailed(request):
             (
                 f"Voting details for the {ballot.name_text} ballot",
                 msg,
-                os.getenv("FROM_EMAIL"),
+                None,
                 [voter.email_text],
             )
         )
