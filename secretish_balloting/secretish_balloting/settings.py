@@ -46,7 +46,7 @@ except Exception:
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG")
+DEBUG = os.getenv("DEBUG", False)
 
 ALLOWED_HOSTS = [os.getenv("BASE_URL").split('//')[-1]]
 
