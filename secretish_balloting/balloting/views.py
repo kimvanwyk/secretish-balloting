@@ -188,8 +188,8 @@ def email_unemailed(request):
         for voter in voters:
             voter.emailed_bool = True
             voter.save()
-            return HttpResponse(
-                f"<h2>{len(emails)} email{'s' if len(emails) > 1 else ''} sent.</h2>"
+        return HttpResponse(
+            f"<h2>{len(emails)} email{'s' if len(emails) > 1 else ''} sent.</h2>"
             )
     return HttpResponse(
         f"<h2>All voters have been emailed before - no emails were sent.</h2>"
