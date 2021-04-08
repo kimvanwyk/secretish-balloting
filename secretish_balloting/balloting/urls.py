@@ -6,7 +6,7 @@ app_name = "balloting"
 urlpatterns = [
     path("emailer/", views.email_unemailed, name="email_unemailed"),
     path(
-        "<str:ballot_fragment>/results/",
+        "<str:ballot_summary_fragment>/results/",
         views.ballot_results,
         name="ballot_results",
     ),

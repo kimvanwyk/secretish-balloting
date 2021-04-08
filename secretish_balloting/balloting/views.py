@@ -89,10 +89,10 @@ def voting_summary(request, ballot_fragment, voter_fragment):
     )
 
 
-def ballot_results(request, ballot_fragment):
+def ballot_results(request, ballot_summary_fragment):
     ballot = get_object_or_404(
         Ballot,
-        url_fragment_text=ballot_fragment,
+        url_summary_fragment_text=ballot_summary_fragment,
     )
     num_voters = len(Voter.objects.filter(ballot=ballot).all())
     votes = (

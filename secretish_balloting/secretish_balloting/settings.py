@@ -48,7 +48,7 @@ except Exception:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", False)
 
-ALLOWED_HOSTS = [os.getenv("BASE_URL").split('//')[-1]]
+ALLOWED_HOSTS = [os.getenv("BASE_URL").split('//')[-1], "localhost"]
 
 EMAIL_HOST = os.getenv("EMAIL_HOST")
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
