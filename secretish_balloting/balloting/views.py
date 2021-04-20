@@ -166,6 +166,8 @@ def email_unemailed(request):
         msg = template.format(
             **{
                 "ballot_name": ballot.name_text,
+                "start": ballot.opening_date.strftime("%H:%M on %d/%m/%Y"),
+                "end": ballot.closing_date.strftime("%H:%M on %d/%m/%Y"),
                 "contact_name": os.getenv("CONTACT_NAME"),
                 "contact_email": os.getenv("CONTACT_EMAIL"),
                 "url": f"{os.getenv('BASE_URL')}{url}",

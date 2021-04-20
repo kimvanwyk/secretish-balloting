@@ -4,6 +4,8 @@ This email address is associated with a vote in the {ballot_name} ballot. To cas
 
 {url}
 
+The ballot will open at {start} and close at {end}.
+
 This link is unique to your vote. You can use it to record your vote as many times as you need to, but only the most recent vote is recorded. 
 
 Your vote is secret - the administrators of the election will see a summary of the voting but will not be shown how any individual voter voted.
