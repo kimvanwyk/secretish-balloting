@@ -113,7 +113,7 @@ def ballot_results(request, ballot_summary_fragment):
             [frequency, choice.choice_text] for (choice, frequency) in choices.items()
         ]
         cl.sort(reverse=True)
-        num_votes = len([c for c in cl if c[0]])
+        num_votes = sum([c[0] for c in cl if c[0]])
         for c in cl:
             if num_votes == 0:
                 percentage = 0
