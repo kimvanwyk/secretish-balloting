@@ -6,14 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('balloting', '0001_initial'),
+        ("balloting", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='ballot',
-            name='url_fragment_text',
-            field=models.CharField(default='default', help_text='Slug text to be used in the urls for this ballot', max_length=40),
+            model_name="ballot",
+            name="url_fragment_text",
+            field=models.CharField(
+                default="default",
+                help_text="Slug text to be used in the urls for this ballot",
+                max_length=40,
+            ),
             preserve_default=False,
         ),
     ]

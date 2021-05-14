@@ -8,33 +8,74 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Ballot',
+            name="Ballot",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name_text', models.CharField(max_length=100)),
-                ('opening_date', models.DateTimeField(verbose_name='opening date and time')),
-                ('closing_date', models.DateTimeField(verbose_name='closing date and time')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name_text", models.CharField(max_length=100)),
+                (
+                    "opening_date",
+                    models.DateTimeField(verbose_name="opening date and time"),
+                ),
+                (
+                    "closing_date",
+                    models.DateTimeField(verbose_name="closing date and time"),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Question',
+            name="Question",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('question_text', models.CharField(max_length=100)),
-                ('ballot', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='balloting.ballot')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("question_text", models.CharField(max_length=100)),
+                (
+                    "ballot",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="balloting.ballot",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Choice',
+            name="Choice",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('choice_text', models.CharField(max_length=100)),
-                ('question', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='balloting.question')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("choice_text", models.CharField(max_length=100)),
+                (
+                    "question",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="balloting.question",
+                    ),
+                ),
             ],
         ),
     ]

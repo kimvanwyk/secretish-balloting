@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('balloting', '0003_choice_order_int'),
+        ("balloting", "0003_choice_order_int"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='choice',
-            name='order_int',
+            model_name="choice",
+            name="order_int",
         ),
         migrations.AddField(
-            model_name='question',
-            name='order_int',
-            field=models.IntegerField(default=1, verbose_name='Question order'),
+            model_name="question",
+            name="order_int",
+            field=models.IntegerField(default=1, verbose_name="Question order"),
             preserve_default=False,
         ),
     ]

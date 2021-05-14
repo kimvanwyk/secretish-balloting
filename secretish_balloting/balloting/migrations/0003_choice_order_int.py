@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('balloting', '0002_ballot_url_fragment_text'),
+        ("balloting", "0002_ballot_url_fragment_text"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='choice',
-            name='order_int',
+            model_name="choice",
+            name="order_int",
             field=models.IntegerField(default=1),
             preserve_default=False,
         ),
