@@ -46,8 +46,6 @@ I consider myself a competent Python developer but there are always new things t
 
 This project is licensed under the [MIT](https://choosealicense.com/licenses/mit/) license.
 
-  
-[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)
 ![Gitlab Build](https://img.shields.io/gitlab/pipeline/kimvanwyk/secretish-balloting/master)
 
   
