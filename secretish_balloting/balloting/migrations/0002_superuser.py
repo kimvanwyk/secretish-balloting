@@ -10,7 +10,7 @@ load_dotenv()
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("balloting", "0007_ballot_url_summary_fragment_text"),
+        ("balloting", "0001_initial"),
     ]
 
     def generate_superuser(apps, schema_editor):
